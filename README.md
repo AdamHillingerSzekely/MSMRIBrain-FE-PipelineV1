@@ -9,8 +9,8 @@ MATLAB 2023b, FEBioStudio (studio version 2.4, solver version 4.4) and GIBBON ar
   <img src="Images/GIBBON.jpeg" width="150">
 </p>
 
-## Manual Preprocessing Step Fo Brain MRI Scans 
-This pipeline requires manual thresholding of white matter MRI scans achieved by a simple thresholding operation (Figure 1a), the same process is applied for grey matter (using the whole brain) and the lesions (using accompanying segmentation masks). These images are saved as NRRD files and imported into ParaView, a future aim is to automate these processes and integrate them into the automated pipeline (PointcloudToModelFullPipeline.m). This process is straightforward and must be performed if the user wishes to analyse a brain MRI scan of their choosing as opposed to using the sample input data.
+## Manual Preprocessing Step For Brain MRI Scans 
+This pipeline requires manual thresholding of white matter MRI scans achieved by a simple thresholding operation (Figure 1a), the same process is applied for grey matter (using the whole brain) and the lesions (using accompanying segmentation masks). These images are saved as NRRD files and imported into ParaView to produce the pointcloud outputs (.ply files). A future aim is to automate these processes and integrate them into the automated pipeline. This process is straightforward and must be performed if the user wishes to analyse a brain MRI scan of their choosing as opposed to using the sample input data. Sample .ply files are provided in the zip file however, meaning the step covered in this section is not necessary to demonstrate the model (PointcloudToModelFullPipeline.m).
 
 <p align="center">
   <img src="Images/MRI-Thresholding.png" width="330">
@@ -28,7 +28,7 @@ Three pointcloud inputs feed into the pipeline (PointcloudToModelFullPipeline.m)
 <p align="center">
   <em>Figure 2: Combined brain surface meshes: grey matter is depicted in black, white matter in aqua and lesions in red. </em>
 </p>
-The "Tetgen" function, native to GIBBON, is then used to convert the surface mesh into a volumetric tetrahedral mesh using Delaunay tetrahedralisation, by taking the boundary geometry and filling the interior of each of the composite regions with tetrahedral elements. 
+The "Tetgen" function, native to GIBBON, is then used to convert the surface mesh into a volumetric tetrahedral mesh using Delaunay tetrahedralisation, by taking the boundary geometry and filling the interior of each of the composite regions with tetrahedral elements (Figure 3). 
 <p align="center">
   <img src="Images/22TetGenMeshCombinedImageblack.jpg" width="2000">
 </p>
