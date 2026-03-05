@@ -1,14 +1,16 @@
 # MSMRIBrain-FE-PipelineV1
-This a computational pipeline through which pointclouds extracted from patient-specific MRI of MS patients (using a 3D Slicer and Paraview) and their respective lesion segmentations can be converted in an FE-model so that mechanical tissue properties can be extracted and analysed. Three scripts are contained. The full PointcloudToModelFullPipeline requires the .ply files in the zipped folder in order to run: from pointcloud to mesh. The remaining two scripts contain a pre-meshed brain ready for finite element analysis (FEA). Details of analysis using and implementation of this pipeline can found in the cited publication [1].
+This a computational pipeline through which pointclouds extracted from patient-specific MRI of MS patients (using a 3D Slicer and Paraview) and their respective lesion segmentations can be converted in an FE-model so that mechanical tissue properties can be extracted and analysed. The repository contains three scripts. The full PointcloudToModelFullPipeline script requires the .ply files contained in the zipped folder to run the complete point cloud–to–mesh conversion. The remaining two scripts accept a pre-meshed brain ready for finite element analysis (FEA) in the form of .mat files. Details of analysis using and implementation of this pipeline can be found in the cited publication [1].
 ## Requirements
 
-MATLAB 2023b, FEBioStudio (studio version 2.4, solver version 4.4) and GIBBON are all required for simulations to run. Install instructions can be found at the following address: https://www.gibboncode.org/Installation/.  
-<p align="Left">
-  <img src="Images/MATLABlogo.png" width="300">
-  <img src="Images/Febio.jpeg" width="450">
+MATLAB 2023b, FEBioStudio (studio version 2.4, solver version 4.4) and GIBBON are all required for simulations to run. Installation instructions can be found at the following address: https://www.gibboncode.org/Installation/.  
+<p align="center">
+  <img src="Images/MATLABlogo.png" width="200">
+  <img src="Images/Febio.jpeg" width="300">
   <img src="Images/GIBBON.jpeg" width="150">
 </p>
-This pipeline requires manual thresholding of white matter MRI scans achieved by simple application of thresholding (Figure 1a), the same process is applied for grey matter (using the whole brain) and the lesions (using accompanying segmentation masks). These images are saved as NRRD files and passed into Paraview, a future aim is to automate these processes into the full automated pipeline (PointcloudToModelFullPipeline.m). 
+
+## Manual Preprocessing Step For Own Brain MRI Scan 
+This pipeline requires manual thresholding of white matter MRI scans achieved by a simple thresholding operation (Figure 1a), the same process is applied for grey matter (using the whole brain) and the lesions (using accompanying segmentation masks). These images are saved as NRRD files and imported into ParaView, a future aim is to automate these processes and integrate them into the automated pipeline (PointcloudToModelFullPipeline.m). 
 
 <p align="center">
   <img src="Images/MRI-Thresholding.png" width="330">
@@ -19,9 +21,9 @@ This pipeline requires manual thresholding of white matter MRI scans achieved by
 </p>
 
 ## The Pipeline
-The pipeline (PointcloudToModelFullPipeline.m) takes three pointcloud inputs corresponding to grey matter, white matter and lesional tissues, converting each of them into surface mesh (and in the case of the lesions, meshes) (Figure 2). These can then be combined, exploiting positional consistency between the pointclouds. To access examples, please unzip plyFiles.zip and place them in the same directory as the PointcloudToModelFullPipeline.m script.
+Three pointcloud inputs feed into the pipeline (PointcloudToModelFullPipeline.m), corresponding to grey matter, white matter and lesional tissues, and each of them into surface mesh (and in the case of the lesions, meshes) (Figure 2). These can then be combined, exploiting positional consistency between the pointclouds. To access examples, please unzip plyFiles.zip and place them in the same directory as the PointcloudToModelFullPipeline.m script.
 <p align="center">
-  <img src="Images/21MeshesCombinedImage.jpg" width="1000">
+  <img src="Images/21MeshesCombinedImage.jpg" width="750">
 </p>
 <p align="center">
   <em>Figure 2: Combined brain surface meshes: grey matter is depicted in black, white matter in aqua and lesions in red. </em>
@@ -34,8 +36,27 @@ The "Tetgen" function, native to GIBBON, is then used to convert the surface mes
   <em>Figure 3: The 3D mesh post-application of 'tetgen', using the same colour scheme as above. </em>
 </p>
 
-During the study we sped up our process by saving the 3D meshes as .mat files (see file tree). The meshDataQ0.mat, meshDataQ1.mat and meshDataQ2.mat are the same meshes of different 
-Tissue properties, loading/pressure parameters can be then be applied. The Ogden hyperelastic model is u default tissue properties for each of thare based on those found in literature (see referenced study) [1]. 
+During the study, we sped up our process by saving the 3D meshes as .mat files (see file tree). The meshDataQ0.mat, meshDataQ1.mat and meshDataQ2.mat are produced using the same brain MRI scan but with the 'targetfaces' parameter altered in the 'FullPipeline scripts' to adjust the number of tetrahedrons comprising each of the sub-regions. The Q0 file contains the coarsest mesh, while the Q2 is the finest included in this repository due to GitHub upload constraints. Using the full pipeline, finer meshes can be produced but will be more computationally expensive to run at the FEBio stage, see Table 5 in Appendix B of the corresponding publication for parametric inputs to produce these [1]. The information from this section onwards also applies to the CyclicLoading and LinearSetup MATLAB scripts in the file tree.
+
+<p align="center">
+  <img src="Images/23BoundaryConditionsImage.jpg" width="2000">
+</p>
+<p align="center">
+  <em>Figure 4: Application of boundary conditions, defined at the base of the brain (shown in black), where the brainstem connects. </em>
+</p>
+
+Tissue properties, loading/pressure parameters and boundary conditions can then be applied. The Ogden hyperelastic model is used as default. The tissue properties for each of the constituent tissues are based on those reported in literature as well as the Prony series for cyclic loading (see referenced study) [1]. Loading is applied tangentially to every external face of the mesh and a set of fixed points are defined at the base of the brain as the boundary condition (Figure 4). All these parametric inputs can be adjusted or changed depending on user requirements. 
+
+<p align="center">
+  <img src="Images/24DisplacementsminImage.jpg" width="1000">
+  <img src="Images/25DisplacementsmaxImage.jpg" width="1000">
+</p>
+<p align="center">
+  <em>Figure 5: a) FEBio out b) .</em>
+</p>
+Once the model setup is complete, the 3D mesh is passed to FEBio, allowing the extraction of mechanical properties including stress, volumetric strain, and displacement. The pipeline outputs a 3D heatmap based on changes in displacement (Figure 5) and pressure distribution across the brain model. Plots of these changes over time are also produced.
+ 
+
 
 ## Citation
 
