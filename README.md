@@ -74,6 +74,7 @@ Computers in Biology and Medicine, 204:111519, 2026.
   volume={204},
   pages={111519},
   year={2026},
-  publisher={Elsevier}
+  publisher={Elsevier},
+  doi={https://doi.org/10.1016/j.compbiomed.2026.111519}
 }
 
