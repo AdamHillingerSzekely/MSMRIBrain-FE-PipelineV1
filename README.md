@@ -58,7 +58,7 @@ Once the model setup is complete, the 3D mesh is passed to FEBio, allowing the e
  
 
 
-## Citation
+## References
 
 If you use this work, please cite:
 
