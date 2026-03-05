@@ -65,7 +65,7 @@ If you use this work, please cite:
 [1] Szekely-Kohn AC, De Oliveira DC, Castellani M, Douglas M, Ahmed Z, Espino DM.  
 *A semi-automated modelling pipeline to predict the mechanics of multiple sclerosis lesion afflicted brains from magnetic resonance images.*  
 Computers in Biology and Medicine, 204:111519, 2026.
-
+https://www.sciencedirect.com/science/article/pii/S0010482526000806?via%3Dihub
 ```bibtex
 @article{szekely2026semi,
   title={A semi-automated modelling pipeline to predict the mechanics of multiple sclerosis lesion afflicted brains from magnetic resonance images},
