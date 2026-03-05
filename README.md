@@ -52,7 +52,7 @@ Tissue properties, loading/pressure parameters and boundary conditions can then 
   <img src="Images/25DisplacementsmaxImage.jpg" width="1000">
 </p>
 <p align="center">
-  <em>Figure 5: a) FEBio out b) .</em>
+  <em>Figure 5: a) Displacement heatmap pre-application of loading using FEBio. b) Displacement heatmap post-application of loading using FEBio.</em>
 </p>
 Once the model setup is complete, the 3D mesh is passed to FEBio, allowing the extraction of mechanical properties including stress, volumetric strain, and displacement. The pipeline outputs a 3D heatmap based on changes in displacement (Figure 5) and pressure distribution across the brain model. Plots of these changes over time are also produced.
  
